@@ -1,0 +1,46 @@
+.TH "cnr" "1" "2020-04-29" "1.0" "Jack's own tools manual"
+.SH NAME
+cnr, cnrc   ->	a tool to quickly compile and run c/cpp files.
+.SH SYNOPSIS
+cnr [options]
+
+cnr [options] -a [arg1, arg2 ..]
+
+cnr [options] -l lib
+.SH DESCRIPTION
+This script is a simple tool to compile and run a .c or .c++ file without having to compile with gcc or g++ first then running it, so if you had a simple main.cpp file which prints hello, in order to run it you would simply do cnr main.cpp. The tool will also by default remove the executable file created by the compiler (its name is taken from the source file containing int main by removing its extension).
+
+The script will compile and link all files specified through its arguments (must be .c for cnrc and .cpp for cnr) but if given directories it will also recursively search for .c/.cpp in the given directories. If no file or directory is given, the current working directory will be assumed.
+
+cnr runs exclusively for .cpp files and cnrc for .c files.
+.SH OPTIONS
+.IP -v
+The executable created by gcc will be run through valgrind
+
+.IP -vv
+Same as above only --leak-check=full will also be specified
+
+.IP -r
+Will not go through directories recursively, but rather only files directly inside them
+
+.IP -k
+Will keep the executable file created by gcc/g++
+
+.IP -l
+The next argument after -l will be given to gcc/g++, for example gcc -l pthread
+    
+.IP -a
+All following arguments will be assumed to be arguments for your executable, they will appear in char **argv
+
+.IP -c
+The executable is not run and not removed either, you have simply compiled without running (useful instead of typing all arguments for gcc)
+
+.IP -t
+Call time on the executable to see the elapsed time of the running program
+
+.IP -s
+Silences compiler messages (errors and warnings)
+.SH AUTHOR
+Written by Craciun Ioan-Flaviu (jack)
+.SH SEE ALSO
+gcc(1), g++(1), valgrind(1), time(1)
