@@ -18,6 +18,7 @@ gcclib=""
 compiler="g++ -std=c++17"
 time_cmd=""
 err_redir=""
+check_compile=false
 
 if [ "$name" == "cnrc" ]; then
 	compiler="gcc"
@@ -44,9 +45,9 @@ while [ $# -gt 0 ]; do
 			shift 1
 		done
 		break
-	elif [ "$1" == "-vv" ]; then
-		valgrind_cmd="valgrind --leak-check=full "
 	elif [ "$1" == "-v" ]; then
+		valgrind_cmd="valgrind --leak-check=full "
+	elif [ "$1" == "--simpleval" ]; then
 		valgrind_cmd="valgrind "
 	elif [ "$1" == "-r" ]; then
 		non_recursive="-maxdepth 1"
@@ -58,6 +59,8 @@ while [ $# -gt 0 ]; do
 		time_cmd="time "
 	elif [ "$1" == "-s" ]; then
 		err_redir=" 2> /dev/null"
+	elif [ "$1" == "--test" ]; then
+		check_compile=true
 	else
 		things="$things"$'\n'"$1"
 	fi
@@ -111,6 +114,11 @@ mainfile=$(readlink -f "$mainfile")
 
 echo "------COMPILING------"
 if eval "$compiler -Wall -Wextra -Wshadow -O2 -ggdb3 -D_GLIBCXX_ASSERTIONS -DWATER_ADDICT ${files[@]} -o \"$mainfile\" $gcclib$err_redir"; then
+	if $check_compile; then
+		echo "------COMPILATION SUCCEDED------"
+		rm "$mainfile"
+		exit 0
+	fi
 	if ! $no_run; then
 		echo "------RUNNING PROGRAM------"
 		ulimit -s unlimited
@@ -119,6 +127,8 @@ if eval "$compiler -Wall -Wextra -Wshadow -O2 -ggdb3 -D_GLIBCXX_ASSERTIONS -DWAT
 			rm "$mainfile"
 		fi
 		echo "------FINISHED------"
+	else 
+		echo "------COMPILATION FINISHED------"
 	fi
 	exit 0
 fi

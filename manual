@@ -15,10 +15,10 @@ The script will compile and link all files specified through its arguments (must
 cnr runs exclusively for .cpp files and cnrc for .c files.
 .SH OPTIONS
 .IP -v
-The executable created by gcc will be run through valgrind
+The executable created by gcc will be run through valgrind with --leak-check=full specified
 
-.IP -vv
-Same as above only --leak-check=full will also be specified
+.IP --simpleval
+Same as above only --leak-check=full will not be specified
 
 .IP -r
 Will not go through directories recursively, but rather only files directly inside them
@@ -40,6 +40,9 @@ Call time on the executable to see the elapsed time of the running program
 
 .IP -s
 Silences compiler messages (errors and warnings)
+
+.IP --test
+Tests for compilation and so removes the executable, also will not run it.
 .SH AUTHOR
 Written by Craciun Ioan-Flaviu (jack)
 .SH SEE ALSO
